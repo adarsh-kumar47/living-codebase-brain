@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p build)",
+      "Bash(javac -cp \"lib/asm-9.7.1.jar\" -d build src/Extractor.java)",
+      "Read(//c/Users/ASUS/.m2/**)",
+      "Bash(./platform/windows/.venv/Scripts/python.exe -m lcb.load --in out/smoke --wipe)",
+      "PowerShell(Set-Location \"S:\\\\Living Codebase brain\\\\extractor\"; $t=Measure-Command { java -Xmx2g -cp \"lib\\\\asm-9.7.1.jar;build\" Extractor --classes \"..\\\\targets\\\\petclinic\\\\target\\\\classes\" --jars \"..\\\\targets\\\\petclinic\\\\target\\\\dependency-all\" --out \"..\\\\out\\\\petclinic\" 2>&1 | Tee-Object -Variable out }; $out | Select-Object -Last 12; Write-Output \"elapsed: $\\($t.TotalSeconds\\)s\")",
+      "Bash(time ./platform/windows/.venv/Scripts/python.exe -m lcb.load --in out/petclinic --wipe)",
+      "Bash(python -)",
+      "Bash(./platform/windows/.venv/Scripts/python.exe -c ' *)"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+# Generated data: rebuilt by `lcb ingest` (CSVs, dependency JARs, state, caches)
+out/
+
+# Example repositories are separate git repositories, cloned on demand
+targets/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv*/
+*.egg-info/
+
+# Compiled extractor: built automatically by `lcb ingest`
+extractor/build/
+
+# VS Code extension build output (also in vscode-extension/.gitignore)
+vscode-extension/node_modules/
+vscode-extension/out/
+*.vsix
+
+# Machine-specific: absolute paths and credentials. `lcb setup` / `lcb mcp-config`
+# generate these for each machine.
+.mcp.json
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# Removed Windows-only setup, in case an old copy reappears
+vendor/
+platform/
+
+.DS_Store

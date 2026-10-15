@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# cq - run a Cypher query against the code graph.
+#
+# Usage:  ./cq "MATCH (c:Class {is_external:false}) RETURN count(c);"
+#
+# Uses cypher-shell when it is on the PATH (Homebrew's Neo4j installs it); otherwise
+# falls back to `python -m lcb.query` with this checkout's virtualenv.
+# Use single quotes inside the Cypher (the shell wrapper uses double quotes).
+
+set -euo pipefail
+
+ADDR="${NEO4J_URI:-bolt://localhost:7687}"
+USER="${NEO4J_USER:-neo4j}"
+PASS="${NEO4J_PASSWORD:-lcbpassword}"
+FORMAT="${CQ_FORMAT:-plain}"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+
+if [ $# -eq 0 ]; then
+  echo "usage: ./cq \"MATCH (n) RETURN count(n);\"" >&2
+  exit 2
+fi
+
+if command -v cypher-shell >/dev/null 2>&1; then
+  exec cypher-shell -a "${ADDR}" -u "${USER}" -p "${PASS}" --format "${FORMAT}" "$*"
+fi
+
+for py in "$HERE/.venv-mac/bin/python" "$HERE/.venv/bin/python" "$HERE/.venv/Scripts/python.exe" python3; do
+  if command -v "$py" >/dev/null 2>&1; then
+    PYTHONPATH="$HERE${PYTHONPATH:+:$PYTHONPATH}" exec "$py" -m lcb.query "${*%;}"
+  fi
+done
+echo "cq: neither cypher-shell nor a Python with lcb found" >&2
+exit 2

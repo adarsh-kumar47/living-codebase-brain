@@ -1,0 +1,79 @@
+{
+  "name": "living-codebase-brain",
+  "displayName": "Living Codebase Brain",
+  "description": "Marks methods you are changing that have been fixed before, using the Living Codebase Brain code graph.",
+  "version": "0.1.0",
+  "publisher": "living-codebase-brain",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "activationEvents": [
+    "onLanguage:java",
+    "onLanguage:kotlin",
+    "onLanguage:groovy",
+    "onLanguage:scala"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "lcb.checkNow",
+        "title": "Check changes for past bug fixes",
+        "category": "Living Codebase Brain"
+      }
+    ],
+    "configuration": {
+      "title": "Living Codebase Brain",
+      "properties": {
+        "lcb.projectRoot": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Path to the Living Codebase Brain checkout (the folder containing `lcb/`). Empty: taken from `~/.lcb/config.json`, which `lcb setup` writes."
+        },
+        "lcb.pythonPath": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Python to run `lcb.check` with. Empty: the checkout's `.venv-mac` or `.venv`, else `python3`."
+        },
+        "lcb.repo": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Git repository to check. Empty: each workspace folder."
+        },
+        "lcb.minConfidence": {
+          "type": "number",
+          "default": 0.2,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "How strong a link to a past fix must be before a method is marked."
+        },
+        "lcb.severity": {
+          "type": "string",
+          "enum": ["error", "warning", "information"],
+          "default": "warning",
+          "markdownDescription": "How marked methods appear. `error` gives a red underline, `warning` a yellow one."
+        },
+        "lcb.neo4jUri": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Code graph address. Empty: `NEO4J_URI` from the environment, else `bolt://localhost:7687`."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "test": "tsc -p . && node --test out/test/*.test.js",
+    "package": "tsc -p . && npx --yes @vscode/vsce@3.2.1 package --allow-missing-repository --skip-license"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/vscode": "1.90.0",
+    "typescript": "5.6.3"
+  }
+}
